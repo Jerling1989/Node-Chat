@@ -4,6 +4,9 @@ const http = require('http');
 const express = require('express');
 const socketIO = require('socket.io');
 
+// REQUIRE FUNCTIONS
+const {generateMessage} = require('./utils/message');
+
 // CREATE PUBLIC PATH VARIABLE
 const publicPath = path.join(__dirname, '../public');
 // CREATE PORT VARIABLE
@@ -23,34 +26,16 @@ io.on('connection', (socket) => {
 	console.log('New user connected');
 
 	// EMIT WELCOME MESSAGE TO USER THAT JOINED
-	socket.emit('newMessage', {
-		from: 'Admin',
-		text: 'Welcome to Node Chat',
-		createdAt: new Date().getTime()
-	});
+	socket.emit('newMessage', generateMessage('Admin', "Welcome to Node Chat"));
 
 	// BROADCAST THAT NEW USER JOINED TO OTHER USERS
-	socket.broadcast.emit('newMessage', {
-		from: 'Admin',
-		text: 'New user joined chat',
-		createdAt: new Date().getTime()
-	});
+	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined chat'));
 
 	// EVENT LISTENER FOR CREATED MESSAGE
 	socket.on('createMessage', (message) => {
 		console.log('createMessage', message);
 		// EMIT MESSAGE FROM SERVER BACK TO CLIENT
-		io.emit('newMessage', {
-			from: message.from,
-			text: message.text,
-			createdAt: new Date().getTime()
-		});
-
-		// socket.broadcast.emit('newMessage', {
-		// 	from: message.from,
-		// 	text: message.text,
-		// 	createdAt: new Date().getTime()
-		// });
+		io.emit('newMessage', generateMessage(message.from, message.text));
 	});
 
 	// CLIENT DISCONNECTED EVENT LISTENER
