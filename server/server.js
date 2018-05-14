@@ -22,6 +22,20 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('New user connected');
 
+	// EMIT WELCOME MESSAGE TO USER THAT JOINED
+	socket.emit('newMessage', {
+		from: 'Admin',
+		text: 'Welcome to Node Chat',
+		createdAt: new Date().getTime()
+	});
+
+	// BROADCAST THAT NEW USER JOINED TO OTHER USERS
+	socket.broadcast.emit('newMessage', {
+		from: 'Admin',
+		text: 'New user joined chat',
+		createdAt: new Date().getTime()
+	});
+
 	// EVENT LISTENER FOR CREATED MESSAGE
 	socket.on('createMessage', (message) => {
 		console.log('createMessage', message);
@@ -31,6 +45,12 @@ io.on('connection', (socket) => {
 			text: message.text,
 			createdAt: new Date().getTime()
 		});
+
+		// socket.broadcast.emit('newMessage', {
+		// 	from: message.from,
+		// 	text: message.text,
+		// 	createdAt: new Date().getTime()
+		// });
 	});
 
 	// CLIENT DISCONNECTED EVENT LISTENER
