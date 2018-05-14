@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Jerling1989/Node-Chat/issues"
   },
-  "homepage": "https://github.com/Jerling1989/Node-Chat#readme"
+  "homepage": "https://github.com/Jerling1989/Node-Chat#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
 }
