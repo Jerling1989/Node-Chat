@@ -32,10 +32,11 @@ io.on('connection', (socket) => {
 	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined chat'));
 
 	// EVENT LISTENER FOR CREATED MESSAGE
-	socket.on('createMessage', (message) => {
+	socket.on('createMessage', (message, callback) => {
 		console.log('createMessage', message);
 		// EMIT MESSAGE FROM SERVER BACK TO CLIENT
 		io.emit('newMessage', generateMessage(message.from, message.text));
+		callback('This is from the server.');
 	});
 
 	// CLIENT DISCONNECTED EVENT LISTENER
