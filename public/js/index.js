@@ -14,12 +14,26 @@ socket.on('disconnect', function () {
 // NEW MESSAGE EVENT LISTENER
 socket.on('newMessage', function (message) {
 	console.log('newMessage', message);
-
+	// CREATE LIST VARIABLE
 	var li = jQuery('<li></li>');
 	li.text(`${message.from}: ${message.text}`);
-
+	// APPEND MESSAGE LIST ITEM TO INDEX.HTML 
 	jQuery('#messages').append(li);
 });
+
+// NEW LOCATION MESSAGE EVENT LISTENER
+socket.on('newLocationMessage', function (message) {
+	var li = jQuery('<li></li>');
+	var a = jQuery('<a target="_blank">My current location</a>');
+
+	li.text(`${message.from}: `);
+	a.attr('href', message.url);
+	li.append(a);
+
+	// APPEND LOCATION MESSAGE TO INDEX.HTML 
+	jQuery('#messages').append(li);
+});
+
 
 // EVENT LISTENER FOR MESSAGE FORM SUBMISSION
 jQuery('#message-form').on('submit', function (e) {

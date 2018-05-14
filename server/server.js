@@ -5,7 +5,7 @@ const express = require('express');
 const socketIO = require('socket.io');
 
 // REQUIRE FUNCTIONS
-const {generateMessage} = require('./utils/message');
+const {generateMessage,generateLocationMessage} = require('./utils/message');
 
 // CREATE PUBLIC PATH VARIABLE
 const publicPath = path.join(__dirname, '../public');
@@ -42,7 +42,7 @@ io.on('connection', (socket) => {
 	// EVENT LISTENER FOR NEW LOCATION MESSAGE
 	socket.on('createLocationMessage', (coords) => {
 		// EMIT LOCATION MESSAGE FROM SERVER BACK TO CLIENT
-		io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.longitude}`));
+		io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
 	});
 
 	// CLIENT DISCONNECTED EVENT LISTENER
