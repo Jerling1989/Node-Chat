@@ -11,18 +11,7 @@
 
 	<!-- LOAD IN SOCKET.IO JS LIBRARY -->
 	<script src="/socket.io/socket.io.js"></script>
-	<script>
-		// CREATE SOCKET CONNECTION
-		var socket = io();
-		// SERVER CONENECTION EVENT LISTENER
-		socket.on('connect', () => {
-			console.log('Connected to server');
-		});
-		// SERVER DISCONNECTED EVENT LISTENER
-		socket.on('disconnect', () => {
-			console.log('Disconnected from server');
-		});
-	</script>
+	<script src="/js/index.js"></script>
 </body>
 
 </html>
