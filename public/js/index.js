@@ -23,12 +23,48 @@ socket.on('newMessage', function (message) {
 
 // EVENT LISTENER FOR MESSAGE FORM SUBMISSION
 jQuery('#message-form').on('submit', function (e) {
+	// PREVENT FORM SUBMIT DEFAULT
 	e.preventDefault();
-
+	// EMIT NEW MESSAGE TO SERVER
 	socket.emit('createMessage', {
 		from: 'User',
 		text: jQuery('[name=message]').val()
 	}, function () {
-
 	});
 });
+
+// STORE SEND LOCATION BUTTON IN VARIABLE
+var locationButton = jQuery('#send-location');
+// CREATE CLICK EVENT FOR SEND LOCATION BUTTON
+locationButton.on('click', function () {
+	// IF GEOLOCATION IS NOT SUPPORTED BY BROWSER ALERT USER
+	if (!navigator.geolocation) {
+		return alert('Geolocation not supported by your browser.');
+	}
+	// CREATE NEW LOCATION MESSAGE WITH LAT & LONG
+	navigator.geolocation.getCurrentPosition(function (position) {
+		socket.emit('createLocationMessage', {
+			latitude: position.coords.latitude,
+			longitude: position.coords.longitude
+		});
+		// ALERT USER UNABLE TO GET LOCATION IF THEY DENY TO SHARE
+	}, function () {
+		alert('Unable to fetch location.');
+	});
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -39,6 +39,12 @@ io.on('connection', (socket) => {
 		callback('This is from the server.');
 	});
 
+	// EVENT LISTENER FOR NEW LOCATION MESSAGE
+	socket.on('createLocationMessage', (coords) => {
+		// EMIT LOCATION MESSAGE FROM SERVER BACK TO CLIENT
+		io.emit('newMessage', generateMessage('Admin', `${coords.latitude}, ${coords.longitude}`));
+	});
+
 	// CLIENT DISCONNECTED EVENT LISTENER
 	socket.on('disconnect', () => {
 		console.log('User was disconnected');
