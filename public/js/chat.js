@@ -41,6 +41,18 @@ socket.on('disconnect', function () {
 	console.log('Disconnected from server');
 });
 
+// UPDATE USER LIST EVENT LISTENER
+socket.on('updateUserList', function(users) {
+	// CREATE UNORDERED LIST
+	var ul = jQuery('<ul></ul>');
+	// APPEND LIST ITEM FOR EVERY USER IN ROOM
+	users.forEach(function (user) {
+		ul.append(jQuery('<li></li>').text(user));
+	});
+	// DISPLAY USER LIST ON FRONTEND
+	jQuery('#users').html(ul);
+});
+
 // NEW MESSAGE EVENT LISTENER
 socket.on('newMessage', function (message) {
 	// CREATE MESSAGE TIMESTAMP

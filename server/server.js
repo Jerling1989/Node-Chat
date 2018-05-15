@@ -7,6 +7,7 @@ const socketIO = require('socket.io');
 // REQUIRE FUNCTIONS
 const {generateMessage,generateLocationMessage} = require('./utils/message');
 const {isRealString} = require('./utils/validation');
+const {Users} = require('./utils/users');
 
 // CREATE PUBLIC PATH VARIABLE
 const publicPath = path.join(__dirname, '../public');
@@ -18,6 +19,8 @@ var app = express();
 var server = http.createServer(app);
 // CREATE WEB SOCKETS SERVER
 var io = socketIO(server);
+// CREATE USERS INSTANCE
+var users = new Users();
 
 // POINT SERVER TO FRONTEND PATH
 app.use(express.static(publicPath));
@@ -30,18 +33,22 @@ io.on('connection', (socket) => {
 	socket.on('join', (params, callback) => {
 		// IF FORM IS NOT FILLED CORRECTLY SEND ERROR
 		if (!isRealString(params.name) || !isRealString(params.room)) {
-			callback('Name and room name are required.');
+			return callback('Name and room name are required.');
 		} 
 
 		// JOIN ROOM
 		socket.join(params.room);
-		// socket.leave(params.room);
+		users.removeUser(socket.id);
+		users.addUser(socket.id, params.name, params.room);
+
+		// EMIT LIST OF USERS TO CLIENT
+		io.to(params.room).emit('updateUserList', users.getUserList(params.room));
 
 
 		// EMIT WELCOME MESSAGE TO USER THAT JOINED
 		socket.emit('newMessage', generateMessage('Admin', "Welcome to Node Chat"));
 		// BROADCAST THAT NEW USER JOINED TO OTHER USERS
-		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`));
+		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined the chat.`));
 
 
 
@@ -64,7 +71,14 @@ io.on('connection', (socket) => {
 
 	// CLIENT DISCONNECTED EVENT LISTENER
 	socket.on('disconnect', () => {
-		console.log('User was disconnected');
+		// REMOVE USER FROM LIST
+		var user = users.removeUser(socket.id);
+
+		if (user) {
+			// UPDATE LIST WITHOUT USER
+			io.to(user.room).emit('updateUserList', users.getUserList(user.room));
+			io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left the chat.`));
+		}
 	});
 
 });
