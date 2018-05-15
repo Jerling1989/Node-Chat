@@ -12,24 +12,31 @@
 </head>
 
 <body class="chat">
-
+	<!-- USERS SIDEBAR -->
 	<div class="chat__sidebar">
 		<h3>People</h3>
+		<!-- DIV TO LOAD USERS -->
 		<div id="users"></div>
 	</div>
+	<!-- END USERS SIDEBAR -->
 
+	<!-- MAIN CHAT DIV -->
 	<div class="chat__main">
+		<!-- LIST TO LOAD MESSAGES -->
 		<ol id="messages" class="chat__messages"></ol>
-
+		<!-- CHAT FOOTER DIV -->
 		<div class="chat__footer">
+			<!-- MESSAGE FORM -->
 			<form id="message-form">
 				<input type="text" name="message" placeholder="Message" autofocus autocomplete="off" />
 				<button>Send</button>
 			</form>
+			<!-- LOCATION BUTTON -->
 			<button id="send-location">Send location</button>
 		</div>
-		
+		<!-- END CHAT FOOTER DIV -->
 	</div>
+	<!-- END MAIN CHAT DIV -->
 
 	<!-- NEW MESSAGE TEMPLATE -->
 	<script id="message-template" type="text/template">
@@ -43,6 +50,7 @@
 			</div>
 		</li>
 	</script>
+	<!-- END NEW MESSAGE TEMPLATE -->
 
 	<!-- NEW LOCATION MESSAGE TEMPLATE -->
 	<script id="location-message-template" type="text/template">
@@ -58,7 +66,7 @@
 			</div>
 		</li>
 	</script>
-
+	<!-- END NEW LOCATION MESSAGE TEMPLATE -->
 
 	<!-- LOAD JS LIBRARIES -->
 	<script src="/socket.io/socket.io.js"></script>
@@ -66,6 +74,7 @@
 	<script src="/js/libs/moment.js"></script>
 	<script src="/js/libs/mustache.js"></script>
 	<script src="/js/libs/deparam.js"></script>
+	<!-- CUSTOM JS SCRIPT -->
 	<script src="/js/chat.js"></script>
 </body>
 
