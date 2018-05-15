@@ -1,6 +1,27 @@
 // CREATE SOCKET CONNECTION
 var socket = io();
 
+// FUNCTION TO CALCULATE AUTOSCROLL TO BOTTOM
+function scrollToBottom () {
+	// SELECTORS
+	var messages = jQuery('#messages');
+	var newMessage = messages.children('li:last-child');
+	// HEIGHTS
+	var clientHeight = messages.prop('clientHeight');
+	var scrollTop = messages.prop('scrollTop');
+	var scrollHeight = messages.prop('scrollHeight');
+	var newMessageHeight = newMessage.innerHeight();
+	var lastMessageHeight = newMessage.prev().innerHeight();
+
+	// IF THE USER IS CLOSE TO THE BOTTOM OF THE MESSAGE PANEL
+	// AUTOMATICALLY SCROLL TO THE BOTTOM WHEN NEW MESSAGE IS RECEIVED
+	if (clientHeight + scrollTop + newMessageHeight + lastMessageHeight >= scrollHeight) {
+		messages.scrollTop(scrollHeight);
+	}
+};
+
+
+
 // SERVER CONENECTION EVENT LISTENER
 socket.on('connect', function () {
 	console.log('Connected to server');
@@ -24,6 +45,7 @@ socket.on('newMessage', function (message) {
 	});
 	// APPEND MESSAGE TO HTML
 	jQuery('#messages').append(html);
+	scrollToBottom();
 });
 
 // NEW LOCATION MESSAGE EVENT LISTENER
@@ -39,6 +61,7 @@ socket.on('newLocationMessage', function (message) {
 	});
 	// APPEND LOCATION MESSAGE TO INDEX.HTML 
 	jQuery('#messages').append(html);
+	scrollToBottom();
 });
 
 
