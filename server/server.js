@@ -36,7 +36,7 @@ io.on('connection', (socket) => {
 		console.log('createMessage', message);
 		// EMIT MESSAGE FROM SERVER BACK TO CLIENT
 		io.emit('newMessage', generateMessage(message.from, message.text));
-		callback('This is from the server.');
+		callback();
 	});
 
 	// EVENT LISTENER FOR NEW LOCATION MESSAGE
