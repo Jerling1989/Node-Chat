@@ -1,6 +1,8 @@
 // CREATE SOCKET CONNECTION
 var socket = io();
 
+var messageSound = new Audio('https://www.freesound.org/data/previews/387/387647_3905081-lq.mp3');
+
 // FUNCTION TO CALCULATE AUTOSCROLL TO BOTTOM
 function scrollToBottom () {
 	// SELECTORS
@@ -67,6 +69,7 @@ socket.on('newMessage', function (message) {
 	// APPEND MESSAGE TO HTML
 	jQuery('#messages').append(html);
 	scrollToBottom();
+	messageSound.play();
 });
 
 // NEW LOCATION MESSAGE EVENT LISTENER
