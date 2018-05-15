@@ -6,6 +6,7 @@ const socketIO = require('socket.io');
 
 // REQUIRE FUNCTIONS
 const {generateMessage,generateLocationMessage} = require('./utils/message');
+const {isRealString} = require('./utils/validation');
 
 // CREATE PUBLIC PATH VARIABLE
 const publicPath = path.join(__dirname, '../public');
@@ -30,6 +31,15 @@ io.on('connection', (socket) => {
 
 	// BROADCAST THAT NEW USER JOINED TO OTHER USERS
 	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined chat'));
+
+	// EVENT LISTENER FOR JOIN FORM SUBMISSION
+	socket.on('join', (params, callback) => {
+		if (!isRealString(params.name) || !isRealString(params.room)) {
+			callback('Name and room name are required.');
+		} 
+
+		callback();
+	});
 
 	// EVENT LISTENER FOR CREATED MESSAGE
 	socket.on('createMessage', (message, callback) => {

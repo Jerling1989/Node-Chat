@@ -21,10 +21,19 @@ function scrollToBottom () {
 };
 
 
-
 // SERVER CONENECTION EVENT LISTENER
 socket.on('connect', function () {
-	console.log('Connected to server');
+	// GET PARAMS FROM JOIN FORM SUBMISSION
+	var params = jQuery.deparam(window.location.search);
+	// EMIT NEW JOIN EVENT TO SERVER
+	socket.emit('join', params, function (err) {
+		if (err) {
+			alert(err);
+			window.location.href = '/';
+		} else {
+			console.log('No error');
+		}
+	});
 });
 
 // SERVER DISCONNECTED EVENT LISTENER
