@@ -11,8 +11,8 @@ This is a chat room app built with HTML, CSS, JavaScript, jQuery, and Node. The 
 - Below is an example of a flowing conversation on the Node Chat app. The NodeBot alerts the users in the chatroom when a new user enters the chat or leaves the chat. There is also a panel on the left side of the page that displays the current users logged into the chat room.
 ![CONVERSATION](/read_me/3-convo.png)
 
-- four
+- Any user on the chat app can also send a link of their location to the other users in the room. By clicking on the link the app will open up a new tab in the browser and enter the user's latitude and longitude into the Google Maps search.
 ![SEND LOCATION](/read_me/4-send-location.png)
 
-- five
+- Below is the Google Maps search from the geolocation link the user 'Jen' sent in the last pic.
 ![GOOGLE MAPS](/read_me/5-google-maps.png)
