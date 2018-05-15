@@ -13,20 +13,24 @@ socket.on('disconnect', function () {
 
 // NEW MESSAGE EVENT LISTENER
 socket.on('newMessage', function (message) {
-	console.log('newMessage', message);
-	// CREATE LIST VARIABLE
+	// CREATE MESSAGE TIMESTAMP
+	var formattedTime = moment(message.createdAt).format('h:mm a');
+	// CREATE LIST ITEM VARIABLE
 	var li = jQuery('<li></li>');
-	li.text(`${message.from}: ${message.text}`);
+	li.text(`${message.from} ${formattedTime}: ${message.text}`);
 	// APPEND MESSAGE LIST ITEM TO INDEX.HTML 
 	jQuery('#messages').append(li);
 });
 
 // NEW LOCATION MESSAGE EVENT LISTENER
 socket.on('newLocationMessage', function (message) {
+	// CREATE MESSAGE TIMESTAMP
+	var formattedTime = moment(message.createdAt).format('h:mm a');
+	// CREATE LIST VARIABLE
 	var li = jQuery('<li></li>');
 	var a = jQuery('<a target="_blank">My current location</a>');
-
-	li.text(`${message.from}: `);
+	// FORMAT MESSAGE (LIST VARIABLE)
+	li.text(`${message.from} ${formattedTime}: `);
 	a.attr('href', message.url);
 	li.append(a);
 
