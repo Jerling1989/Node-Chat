@@ -46,9 +46,9 @@ io.on('connection', (socket) => {
 
 
 		// EMIT WELCOME MESSAGE TO USER THAT JOINED
-		socket.emit('newMessage', generateMessage('Admin', "Welcome to Node Chat"));
+		socket.emit('newMessage', generateMessage('NodeBot', "Welcome to Node Chat"));
 		// BROADCAST THAT NEW USER JOINED TO OTHER USERS
-		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined the chat.`));
+		socket.broadcast.to(params.room).emit('newMessage', generateMessage('NodeBot', `${params.name} has joined the chat.`));
 
 
 
@@ -57,16 +57,25 @@ io.on('connection', (socket) => {
 
 	// EVENT LISTENER FOR CREATED MESSAGE
 	socket.on('createMessage', (message, callback) => {
-		console.log('createMessage', message);
-		// EMIT MESSAGE FROM SERVER BACK TO CLIENT
-		io.emit('newMessage', generateMessage(message.from, message.text));
+		// CREATE VARIABLE FOR USER
+		var user = users.getUser(socket.id);
+		// IF USER EXISTS AND MESSAGE IS STRING
+		if (user && isRealString(message.text)) {
+			// EMIT MESSAGE FROM SERVER BACK TO CLIENT
+			io.to(user.room).emit('newMessage', generateMessage(user.name, message.text));
+		}
 		callback();
 	});
 
 	// EVENT LISTENER FOR NEW LOCATION MESSAGE
 	socket.on('createLocationMessage', (coords) => {
-		// EMIT LOCATION MESSAGE FROM SERVER BACK TO CLIENT
-		io.emit('newLocationMessage', generateLocationMessage('Admin', coords.latitude, coords.longitude));
+		// CREATE VARIABLE FOR USER
+		var user = users.getUser(socket.id);
+		// IF USER EXISTS
+		if (user) {
+			// EMIT LOCATION MESSAGE FROM SERVER BACK TO CLIENT
+			io.to(user.room).emit('newLocationMessage', generateLocationMessage(user.name, coords.latitude, coords.longitude));
+		}
 	});
 
 	// CLIENT DISCONNECTED EVENT LISTENER
@@ -77,7 +86,7 @@ io.on('connection', (socket) => {
 		if (user) {
 			// UPDATE LIST WITHOUT USER
 			io.to(user.room).emit('updateUserList', users.getUserList(user.room));
-			io.to(user.room).emit('newMessage', generateMessage('Admin', `${user.name} has left the chat.`));
+			io.to(user.room).emit('newMessage', generateMessage('NodeBot', `${user.name} has left the chat.`));
 		}
 	});
 
