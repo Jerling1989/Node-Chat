@@ -26,17 +26,24 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
 	console.log('New user connected');
 
-	// EMIT WELCOME MESSAGE TO USER THAT JOINED
-	socket.emit('newMessage', generateMessage('Admin', "Welcome to Node Chat"));
-
-	// BROADCAST THAT NEW USER JOINED TO OTHER USERS
-	socket.broadcast.emit('newMessage', generateMessage('Admin', 'New user joined chat'));
-
 	// EVENT LISTENER FOR JOIN FORM SUBMISSION
 	socket.on('join', (params, callback) => {
+		// IF FORM IS NOT FILLED CORRECTLY SEND ERROR
 		if (!isRealString(params.name) || !isRealString(params.room)) {
 			callback('Name and room name are required.');
 		} 
+
+		// JOIN ROOM
+		socket.join(params.room);
+		// socket.leave(params.room);
+
+
+		// EMIT WELCOME MESSAGE TO USER THAT JOINED
+		socket.emit('newMessage', generateMessage('Admin', "Welcome to Node Chat"));
+		// BROADCAST THAT NEW USER JOINED TO OTHER USERS
+		socket.broadcast.to(params.room).emit('newMessage', generateMessage('Admin', `${params.name} has joined`));
+
+
 
 		callback();
 	});
